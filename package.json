@@ -1,0 +1,27 @@
+{
+  "name": "proceduraltypescript",
+  "version": "1.0.0",
+  "description": "Procedural generation using typescript",
+  "main": "index.js",
+  "dependencies": {
+    "nodemon": "^2.0.15",
+    "tsc-watch": "^4.6.0",
+    "typescript": "^4.5.4",
+    "vector2d": "^3.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc-watch --onSuccess \"nodemon ./dist/index.js\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Armandothom/ProceduralTypescript.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Armandothom/ProceduralTypescript/issues"
+  },
+  "homepage": "https://github.com/Armandothom/ProceduralTypescript#readme"
+}
