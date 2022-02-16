@@ -11,29 +11,29 @@ export class Perlin {
   }
 
   generatePerlinValue(x: number, y: number) {
-    console.log(`X value ${x}\nY value ${y}`)
     let xInputPointFloored = Math.floor(x) % (this.permutationNumbersMax - 1);
     let yInputPointFloored = Math.floor(y) % (this.permutationNumbersMax - 1);
-    let xInputPointDiff = this.fade(x - Math.floor(x));
-    let yInputPointDiff = this.fade(y - Math.floor(y));
+    let xInputPointDiff = x - Math.floor(x);
+    let yInputPointDiff = y - Math.floor(y);
 
     let offsetTopRightToInput = new Vector2(xInputPointDiff - 1.0, yInputPointDiff - 1.0);
-    console.log(`offsetTopRightToInput (${xInputPointDiff - 1.0},${yInputPointDiff - 1.0})`);
     let offsetTopLeftToInput = new Vector2(xInputPointDiff, yInputPointDiff - 1.0);
-    console.log(`offsetTopLeftToInput (${xInputPointDiff},${yInputPointDiff - 1.0})`);
     let offsetBottomRightToInput = new Vector2(xInputPointDiff - 1.0, yInputPointDiff);
-    console.log(`offsetBottomRightToInput (${xInputPointDiff - 1.0},${yInputPointDiff})`);
     let offsetBottomLeftToInput = new Vector2(xInputPointDiff, yInputPointDiff);
-    console.log(`offsetBottomLeftToInput (${xInputPointDiff}, ${yInputPointDiff})`);
 
     let topRightGridValue = this.permutationNumbers[this.permutationNumbers[xInputPointFloored + 1] + yInputPointFloored + 1]; //P[P[X+1]+Y+1]
-    let topLeftGridValue = this.permutationNumbers[this.permutationNumbers[xInputPointFloored]+ yInputPointFloored + 1]; //P[P[X]+Y+1]
-    let bottomRightGridValue = this.permutationNumbers[this.permutationNumbers[xInputPointFloored] + yInputPointFloored]; //P[P[X+1]+Y]
+    let topLeftGridValue = this.permutationNumbers[this.permutationNumbers[xInputPointFloored] + yInputPointFloored + 1]; //P[P[X]+Y+1]
+    let bottomRightGridValue = this.permutationNumbers[this.permutationNumbers[xInputPointFloored + 1] + yInputPointFloored]; //P[P[X+1]+Y]
     let bottomLeftGridValue = this.permutationNumbers[this.permutationNumbers[xInputPointFloored] + yInputPointFloored]; //P[P[X]+Y]
 
-    return this.lerp(xInputPointDiff,
+    let interpolatedValue: number = this.lerp(xInputPointDiff,
       this.lerp(yInputPointDiff, this.grad(bottomLeftGridValue, offsetBottomLeftToInput), this.grad(topLeftGridValue, offsetTopLeftToInput)),
-      this.lerp(yInputPointDiff, this.grad(bottomRightGridValue, offsetBottomRightToInput), this.grad(topRightGridValue, offsetTopRightToInput)))
+      this.lerp(yInputPointDiff, this.grad(bottomRightGridValue, offsetBottomRightToInput), this.grad(topRightGridValue, offsetTopRightToInput)));
+    return this.limitRange(interpolatedValue);
+  }
+
+  limitRange(interpolatedValue: number): number {
+    return interpolatedValue;
   }
 
   lerp(interpolationValue: number, startValue: number, endValue: number): number {
@@ -75,20 +75,14 @@ export class Perlin {
   }
 
   grad(valuePermutation: number, vectorDistance: Vector2): number {
-    switch (valuePermutation % 7) {
+    switch (valuePermutation % 4) {
       case 0:
-        return vectorDistance.dot(new Vector2(0, 0));
-      case 1:
-        return vectorDistance.dot(new Vector2(0, 1));
-      case 2:
-        return vectorDistance.dot(new Vector2(1, 0));
-      case 3:
         return vectorDistance.dot(new Vector2(1, 1));
-      case 4:
-        return vectorDistance.dot(new Vector2(0, -1));
-      case 5:
-        return vectorDistance.dot(new Vector2(-1, 0));
-      case 6:
+      case 1:
+        return vectorDistance.dot(new Vector2(1, -1));
+      case 2:
+        return vectorDistance.dot(new Vector2(-1, 1));
+      case 3:
         return vectorDistance.dot(new Vector2(-1, -1));
       default:
         return 0; // never gonna happen
@@ -108,4 +102,10 @@ export class Perlin {
   2 -> Pega o número dos pontos(x e y)  input point (point inside the square of the grid)
   3 -> Pega os valores para cada grid point usando hash function
   4 -> Usa grad function para pegar um vector aleatorio para fazer o dot
+
+  //
+  Get the input point within the square grid, from user input.
+  Calculate the distance vector from each of the grid points to the input point
+  Get the constant vectors using hash and then calculate the dot product with the distance vector
+  Lerp the results
 */
