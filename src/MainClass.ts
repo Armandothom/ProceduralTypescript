@@ -1,14 +1,14 @@
 import { MapClass } from "./MapClass";
 
 class MainClass {
-	//private map : MapClass;
+	private map : MapClass;
 	constructor() {
-		//this.map = new MapClass();
+		this.map = new MapClass();
 		this.createMap();
 	}
 
 	createMap() {
-		//this.map.generateMap();
+		this.map.generateMap();
 	}
 }
 

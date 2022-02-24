@@ -1,9 +1,12 @@
 class Tile {
-	height: number = 32;
-	width : number = 32;
+	size: number = 16;
 	color : string;
-	constructor(color : string) {
+	name : string;
+	value : number | undefined
+	constructor(color : string, name : string, value? : number) {
 		this.color = color;
+		this.name = name;
+		this.value = value;
 	}
 }
 

@@ -29,10 +29,6 @@ export class Perlin {
     let interpolatedValue: number = this.lerp(xInputPointDiff,
       this.lerp(yInputPointDiff, this.grad(bottomLeftGridValue, offsetBottomLeftToInput), this.grad(topLeftGridValue, offsetTopLeftToInput)),
       this.lerp(yInputPointDiff, this.grad(bottomRightGridValue, offsetBottomRightToInput), this.grad(topRightGridValue, offsetTopRightToInput)));
-    return this.limitRange(interpolatedValue);
-  }
-
-  limitRange(interpolatedValue: number): number {
     return interpolatedValue;
   }
 
@@ -97,15 +93,10 @@ export class Perlin {
 }
 
 
-/*Passos
-  1 -> Pega os número do ponto (x e y) dos grid points (points on the corner) com math floor e transforma em um número menor que 255 e maior que 0.
-  2 -> Pega o número dos pontos(x e y)  input point (point inside the square of the grid)
-  3 -> Pega os valores para cada grid point usando hash function
-  4 -> Usa grad function para pegar um vector aleatorio para fazer o dot
-
-  //
-  Get the input point within the square grid, from user input.
-  Calculate the distance vector from each of the grid points to the input point
-  Get the constant vectors using hash and then calculate the dot product with the distance vector
-  Lerp the results
+/*
+  Steps
+  1 -> Get the input point within the square grid, from user input.
+  2 -> Calculate the distance vector from each of the grid points to the input point
+  3 -> Get the constant vectors using hash function and then calculate the dot product with the distance vector
+  4 -> Lerp the results on x and y axis
 */
