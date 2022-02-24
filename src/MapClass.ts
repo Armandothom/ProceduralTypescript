@@ -15,7 +15,7 @@ export class MapClass {
 
   /*Generates the map*/
   public generateMap() {
-    let perlinNoise: Perlin = new Perlin("mountain");
+    let perlinNoise: Perlin = new Perlin("fafa");
     let octaves = 8;
     for (let x = 0; x < this.width; x++) {
       for (let y = 0; y < this.height; y++) {
@@ -24,11 +24,11 @@ export class MapClass {
         let perlinResult = 0
         for (let o = 0; o < octaves; o++) {
           let perlin = perlinNoise.generatePerlinValue(x * frequency, y * frequency) * amplitude;
-          frequency *= 1.8;
+          frequency *= 2;
           amplitude *= 0.5;
           perlinResult += perlin;
         }
-        perlinResult = perlinResult
+        perlinResult = Math.abs(perlinResult)
         this.setHeatMap(x, y, perlinResult);
       }
     }
@@ -37,9 +37,9 @@ export class MapClass {
 
     /*Used to set the properties of the tile of the heatmap tilemap*/
   setHeatMap(xCoord: number, yCoord: number, perlinValue: number) {
-    if (perlinValue <= 0.6) {
+    if (perlinValue <= 0.35) {
       this.heatmap.setTile(new Tile("#ff0000", "HEATMAP_LOW", perlinValue), xCoord, yCoord);
-    } else if (perlinValue > 0.6 && perlinValue <= 0.8) {
+    } else if (perlinValue > 0.35 && perlinValue <= 0.7) {
       this.heatmap.setTile(new Tile("#780000", "HEATMAP_MID", perlinValue), xCoord, yCoord);
     } else {
       this.heatmap.setTile(new Tile("#2b0000", "HEATMAP_HIGH", perlinValue), xCoord, yCoord);
